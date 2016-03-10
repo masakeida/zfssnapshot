@@ -1,11 +1,13 @@
 # zfssnapshot
 ZFS snapshot management
 
-# 基本方針
+## 基本方針
++ Rich Mikanさんのutconv (https://gist.github.com/richmikan/8703117) を利用する。
 + 毎日定時にsnapshot作成。
 + snapshotの名前はyyyymmdd
 + snapshotは1週間保存
 + 毎月01日のsnapshotのみ1年間保存
++ /root/binにutconvとzfssnapshotを置く。
 
 crontabで毎日午前3時にsnapshotを撮る場合の記述。
 ```/etc/crontab
