@@ -1,0 +1,35 @@
+#!/bin/sh
+
+pool="hpool/home"
+today=`date +%Y%m%d`
+
+zfs snapshot ${pool}@${today}
+
+now=`date +%Y%m%d%H%M%S`
+utime_now=`/root/bin/utconv ${now}`
+utime_wago=`expr ${utime_now} - 604800`
+utime_yago=`expr ${utime_now} - 31536000`
+
+# スナップショットは数字文字列のみのものが削除の対象
+# 英文字を入れたものにrenameすることで削除されなくすることができる。
+snaplist=`zfs list -t snapshot | grep "${pool}" | cut -d' ' -f1 | cut -d'@' -f2 | grep '^[0-9]*$'`
+
+for snaptime in ${snaplist}
+do
+    day=`echo ${snaptime} | cut -c 7-8`
+    # 毎日のスナップショットは1週間保存
+    # 01日のスナップショットは1年間保存
+    if [ $day -ne "01" ]; then
+	# 01日でないものは1週間以前を削除
+	utime=`/root/bin/utconv ${snaptime}`
+	if [ ${utime} -lt ${utime_wago} -a -n "${snaptime}" ]; then
+	    zfs destroy ${pool}@${snaptime}
+	fi
+    else
+	# 01日のものは1年間以前を削除
+	utime=`/root/bin/utconv ${snaptime}`
+	if [ ${utime} -lt ${utime_yago} -a -n "${snaptime}" ]; then
+	    zfs destroy ${pool}@${snaptime}
+	fi
+    fi
+done
