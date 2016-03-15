@@ -7,8 +7,8 @@ zfs snapshot ${pool}@${today}
 
 now=`date +%Y%m%d%H%M%S`
 utime_now=`/root/bin/utconv ${now}`
-utime_wago=`expr ${utime_now} - 604800`
-utime_yago=`expr ${utime_now} - 31536000`
+utime_wago=`expr ${utime_now} - 60 \* 60 \* 24 \* 7`
+utime_yago=`expr ${utime_now} - 60 \* 60 \* 24 \* 365`
 
 # スナップショットは数字文字列のみのものが削除の対象
 # 英文字を入れたものにrenameすることで削除されなくすることができる。
