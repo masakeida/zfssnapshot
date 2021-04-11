@@ -2,7 +2,7 @@
 ZFS snapshot management
 
 ## 基本方針
-+ Rich Mikanさんのutconv (https://gist.github.com/richmikan/8703117) を利用する。
++ Col. Richie さんのutconv (https://gist.github.com/colrichie/8703117) を利用する。
 + 毎日定時にsnapshot作成。
 + snapshotの名前はyyyymmdd
 + snapshotは1週間保存
